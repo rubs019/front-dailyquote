@@ -2,14 +2,42 @@ import React from 'react'
 import Link from 'gatsby-link'
 import { Container, Title } from 'bloomer'
 
-const IndexPage = () => (
-  <Container hasTextAlign="centered">
-    <Title isSize="1">Il ne sert à rien de dire “Nous avons fait de notre mieux”. Il faut réussir à faire ce qui est nécessaire.</Title>
-    <Title isSize="3">
-      Winston <strong>Churchill</strong> - Politicien &#x2690;
-    </Title>
-    <Title isSize="4">30/11/1874 - 24/01/1965</Title>
-  </Container>
-)
+const urlQuote = 'https://dailyquotes-api.herokuapp.com/quotes'
+//const urlQuote = 'http://localhost:8003/quotes'
+
+class IndexPage extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {}
+  }
+
+  componentDidMount() {
+    fetch(urlQuote)
+      .then(quote => quote.json())
+      .then(quote => {
+        this.setState({
+          quote
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  render() {
+    if (!this.state.quote) return <p>Chargement...</p>
+    return (
+      <Container hasTextAlign="centered">
+        <Title isSize="1">"{ this.state.quote.data.message }"</Title>
+        <Title isSize="3">
+          <strong>{ this.state.quote.data.name }</strong> - { this.state.quote.data.job } &#x2690;
+        </Title>
+        <Title isSize="4">{ this.state.quote.data.born } - { this.state.quote.data.died }</Title>
+      </Container>
+    )
+  }
+}
 
 export default IndexPage
