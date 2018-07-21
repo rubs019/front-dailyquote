@@ -5,8 +5,8 @@ Error: File to import not found or unreadable: ~bulma.
 1: @import "~bulma"
 2: 
 3: #background
-4:   background-color: red
-5:   animation: backTransition 60s infinite
+4:   background-color: #00d2ff
+5:   animation: backTransition 40s infinite
 6: 
 
 Backtrace:
@@ -53,4 +53,4 @@ all.sass:1
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~bulma.\A         on line 1 of all.sass\A \A 1: @import \"~bulma\"\A 2: \A 3: #background\A 4:   background-color: red\A 5:   animation: backTransition 60s infinite\A 6: "; }
+  content: "Error: File to import not found or unreadable: ~bulma.\A         on line 1 of all.sass\A \A 1: @import \"~bulma\"\A 2: \A 3: #background\A 4:   background-color: #00d2ff\A 5:   animation: backTransition 40s infinite\A 6: "; }

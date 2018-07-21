@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'gatsby-link'
-import { Container, Columns, Column, Title} from 'bloomer'
+import { Container, Button, Columns, Column, Title} from 'bloomer'
 
 const AppHeader = () => (
   <Container>
@@ -8,6 +8,11 @@ const AppHeader = () => (
       <Column isSize='6/12'>
         <Title>DailyQuote</Title>
       </Column>
+      {/*<Column>
+        <Button>
+          <p>Disable transitions</p>
+        </Button>
+      </Column>*/}
     </Columns>
   </Container>
 )

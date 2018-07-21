@@ -10,21 +10,47 @@ class IndexPage extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      animate: ['.']
+    }
+
+    this.playAnimation = this.playAnimation.bind(this)
   }
 
+  playAnimation() {
+    let previouState = this.state.animate.length
+    const interval = setInterval(() => {
+      if (this.state.quote) clearInterval(interval)
+
+      switch (this.state.animate.length) {
+        case 1 : {
+          previouState = 1
+          this.setState((state) => {
+            state.animate.push('.')
+          })
+          break
+        }
+        case 2 : {
+          this.setState((state) => {
+            if(previouState === 1) state.animate.push('.')
+            if(previouState === 3) state.animate.pop()
+          })
+          break
+        }
+        case 3 : {
+          previouState = 3
+          this.setState((state) => {
+            state.animate.pop()
+          })
+          break
+        }
+
+      }
+    }, 1000)
+  }
   componentDidMount() {
-    // Original function
-    /*fetch(urlQuote)
-      .then(quote => quote.json())
-      .then(quote => {
-        this.setState({
-          quote
-        })
-      })
-      .catch(err => {
-        console.log(err)
-      })*/
+
+    this.playAnimation()
 
     fetch(urlQuote)
     // Retrieve its body as ReadableStream
@@ -40,12 +66,9 @@ class IndexPage extends React.Component {
               return reader.read().then(({ done, value }) => {
                 // When no more data needs to be consumed, close the stream
                 if (done) {
-                  console.log('stream complete')
                   controller.close();
                   return;
                 }
-
-                console.log(value)
 
                 // Enqueue the next data chunk into our target stream
                 controller.enqueue(value);
@@ -62,37 +85,22 @@ class IndexPage extends React.Component {
           quote
         })
       })
-      .catch(err => console.error(err));
-  }
-
-  fetchStream(stream) {
-    const reader = stream.body.getReader()
-    let result
-    let charsReceived = 0
-
-    return reader.read()
-      .then(function processText({done, value}) {
-        if (done) {
-          console.log('stream complete')
-          console.log(value)
-          return stream
-        }
-
-        charsReceived += value.length
-        const chunk = value
-        console.log(`Received ${charsReceived} characters so far. Current chunk = ${chunk}`)
-
-        result += chunk
-
-        return reader.read().then(processText)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      .catch(err => console.error(err))
   }
 
   render() {
-    if (!this.state.quote) return <p>Chargement...</p>
+    if (!this.state.quote) {
+      return(
+        <Container hasTextAlign="centered">
+          <Title isSize="3">
+            <strong>
+              <span>Chargement </span>
+              <p style={{width: '25px', display: 'inline-block'}}>{ this.state.animate }</p></strong>
+          </Title>
+        </Container>
+      )
+    }
+
     return (
       <Container hasTextAlign="centered">
         <Title isSize="1">"{ this.state.quote.data.message }"</Title>
