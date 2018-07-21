@@ -8,7 +8,7 @@
     "bloomer": "^0.6.3",
     "bulma": "^0.6.2",
     "font-awesome": "^4.7.0",
-    "gatsby": "^1.9.275",
+    "gatsby": "^1.9.277",
     "gatsby-link": "^1.6.39",
     "gatsby-plugin-react-helmet": "^2.0.8",
     "gatsby-plugin-sass": "^1.0.26",
@@ -22,9 +22,11 @@
     "build": "gatsby build",
     "dev": "gatsby develop -o",
     "format": "prettier --write 'src/**/*.js'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "devDependencies": {
+    "gh-pages": "^1.2.0",
     "prettier": "^1.11.1"
   }
 }

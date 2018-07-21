@@ -14,12 +14,77 @@ class IndexPage extends React.Component {
   }
 
   componentDidMount() {
-    fetch(urlQuote)
+    // Original function
+    /*fetch(urlQuote)
       .then(quote => quote.json())
       .then(quote => {
         this.setState({
           quote
         })
+      })
+      .catch(err => {
+        console.log(err)
+      })*/
+
+    fetch(urlQuote)
+    // Retrieve its body as ReadableStream
+      .then(response => response.body)
+      .then(body => {
+        const reader = body.getReader();
+
+        return new ReadableStream({
+          start(controller) {
+            return pump();
+
+            function pump() {
+              return reader.read().then(({ done, value }) => {
+                // When no more data needs to be consumed, close the stream
+                if (done) {
+                  console.log('stream complete')
+                  controller.close();
+                  return;
+                }
+
+                console.log(value)
+
+                // Enqueue the next data chunk into our target stream
+                controller.enqueue(value);
+                return pump();
+              });
+            }
+          }
+        })
+      })
+      .then(stream => new Response(stream))
+      .then(response => response.json())
+      .then(quote => {
+        this.setState({
+          quote
+        })
+      })
+      .catch(err => console.error(err));
+  }
+
+  fetchStream(stream) {
+    const reader = stream.body.getReader()
+    let result
+    let charsReceived = 0
+
+    return reader.read()
+      .then(function processText({done, value}) {
+        if (done) {
+          console.log('stream complete')
+          console.log(value)
+          return stream
+        }
+
+        charsReceived += value.length
+        const chunk = value
+        console.log(`Received ${charsReceived} characters so far. Current chunk = ${chunk}`)
+
+        result += chunk
+
+        return reader.read().then(processText)
       })
       .catch(err => {
         console.log(err)
