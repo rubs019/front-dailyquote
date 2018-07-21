@@ -22,7 +22,7 @@ import AppFooter from '../components/Footer'
 const TemplateWrapper = ({ children }) => (
   <div>
     <Helmet title="[DEV] DailyQuote" />
-    <Hero isFullHeight isColor="primary">
+    <Hero isFullHeight id='background'>
       <HeroHeader>
         <AppHeader />
       </HeroHeader>
@@ -34,7 +34,7 @@ const TemplateWrapper = ({ children }) => (
           <Tabs isAlign="centered">
             <TabList>
               <Tab>
-                <TabLink>And this at the bottom</TabLink>
+                <TabLink>Watch below</TabLink>
               </Tab>
             </TabList>
           </Tabs>

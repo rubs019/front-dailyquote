@@ -9,7 +9,7 @@ const AppFooter = () => (
           <Column isFull>
             <p>
               Made with<Icon hasTextColor="danger" className="fa fa-heart" />
-              at <a href="https://cethyworks.io">cethyworks.io</a>
+              by <a href="https://github.com/rubs019">Ruben DESERT</a>
             </p>
           </Column>
         </Columns>
