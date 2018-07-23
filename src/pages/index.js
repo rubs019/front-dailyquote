@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'gatsby-link'
-import { Container, Title } from 'bloomer'
+import { Container, Title, Tag, Box, Icon, Columns, Column, Content } from 'bloomer'
 
 const urlQuote = 'https://dailyquotes-api.herokuapp.com/quotes'
 //const urlQuote = 'http://localhost:8003/quotes'
@@ -102,12 +102,38 @@ class IndexPage extends React.Component {
     }
 
     return (
-      <Container hasTextAlign="centered" id="box-quote-elem">
-        <Title isSize="2">"{ this.state.quote.data.message }"</Title>
-        <Title isSize="3">
-          <strong>{ this.state.quote.data.name }</strong> - { this.state.quote.data.job } &#x2690;
-        </Title>
-        <Title isSize="4">{ this.state.quote.data.born } - { this.state.quote.data.died }</Title>
+      <Container hasTextAlign="centered" id='box-quote-elem'>
+
+        <p id="clock-timer">Prochaine citations dans { this.state.counter }</p>
+        <Box>
+          <Title isSize="2">"{ this.state.quote.data.message }"</Title>
+          <Columns isVCentered hasTextAlign="right">
+
+            <Column>
+              <Content>
+                <Title isSize="5">
+                  <b>{ this.state.quote.data.name }</b>
+                  <span>- { this.state.quote.data.job } ({ this.state.quote.data.born.split('/')[2] } - { this.state.quote.data.died.split('/')[2] }) </span>
+                </Title>
+              </Content>
+            </Column>
+          </Columns>
+          <Columns>
+
+
+            <Column isSize="5">
+              <Tag isColor='success' isSize="medium">24 Interprations</Tag>
+            </Column>
+
+            <Column>
+                <Tag isColor='danger' isSize="medium">
+                  <Icon className="fa fa-heart fa" isSize="large" />
+                  1324 Like
+                </Tag>
+            </Column>
+
+          </Columns>
+        </Box>
       </Container>
     )
   }

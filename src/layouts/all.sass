@@ -1,4 +1,4 @@
-@import "~bulma"
+@import "../../node_modules/bulma/bulma"
 
 #background
   background-color: #00d2ff
@@ -6,10 +6,32 @@
 
 @keyframes backTransition
   0%
-      background-color: #00d2ff
+    background-color: #00d2ff
   25%
-    background-color: #A1FFCE
+    background-color: #4286f4
   50%
     background-color: #43C6AC
   75%
     background-color: #3fada8
+
+
+#box-quote-elem
+  #clock-timer
+    text-align: right
+  .box
+    background-color: rgba(255, 255, 255, 0.25) !important
+  h1
+    color: #ffffff
+  .is-2
+    font-style: italic
+  .fa-heart
+    color: white
+
+  .tag.is-danger:hover
+    cursor: pointer
+    background-color: white
+    color: red
+    transition: ease-out .2s
+    .fa-heart
+      color: red
+      transition: ease-out .2s
