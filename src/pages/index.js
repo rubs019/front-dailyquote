@@ -102,8 +102,8 @@ class IndexPage extends React.Component {
     }
 
     return (
-      <Container hasTextAlign="centered">
-        <Title isSize="1">"{ this.state.quote.data.message }"</Title>
+      <Container hasTextAlign="centered" id="box-quote-elem">
+        <Title isSize="2">"{ this.state.quote.data.message }"</Title>
         <Title isSize="3">
           <strong>{ this.state.quote.data.name }</strong> - { this.state.quote.data.job } &#x2690;
         </Title>
