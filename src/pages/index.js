@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import { Container, Title, Tag, Box, Icon, Columns, Column, Content } from 'bloomer'
+import Moment from 'moment'
 
 const urlQuote = 'https://dailyquotes-api.herokuapp.com/quotes'
 //const urlQuote = 'http://localhost:8003/quotes'
@@ -16,7 +17,7 @@ class IndexPage extends React.Component {
     }
 
     this.playAnimation = this.playAnimation.bind(this)
-    this.counterTick = this.counterTick.bind(this)
+    this.counterToNextQuote = this.counterToNextQuote.bind(this)
   }
 
   playAnimation() {
@@ -50,15 +51,21 @@ class IndexPage extends React.Component {
       }
     }, 1000)
   }
-  counterTick() {
+  counterToNextQuote() {
+    const counterForNextQuote = new Moment('2018-07-27')
     this.setState((state) => {
-      state.counter = new Date().toLocaleTimeString()
+      let expire = Moment.duration(counterForNextQuote.diff(Moment.now()))
+      let hours = expire.hours() < 10 ? `0${expire.hours()}` : expire.hours()
+      let minutes = expire.minutes() < 10 ? `0${expire.minutes()}` : expire.minutes()
+      let seconds = expire.seconds() < 10 ? `0${expire.seconds()}` : expire.seconds()
+
+      state.counter = `${hours} : ${minutes} : ${seconds}`
     })
   }
   componentDidMount() {
 
     this.playAnimation()
-    setInterval(this.counterTick, 1000)
+    setInterval(this.counterToNextQuote, 1000)
 
     fetch(urlQuote)
     // Retrieve its body as ReadableStream
@@ -111,8 +118,7 @@ class IndexPage extends React.Component {
 
     return (
       <Container hasTextAlign="centered" id='box-quote-elem'>
-
-        <p id="clock-timer">Prochaine citations dans { this.state.counter }</p>
+        <p id="clock-timer">Prochaine citations dans { !this.state.counter ? `00:00:00` : this.state.counter}</p>
         <Box>
           <Title isSize="2">"{ this.state.quote.data.message }"</Title>
           <Columns isVCentered hasTextAlign="right">

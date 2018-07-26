@@ -6442,7 +6442,9 @@ label.panel-block {
   75% {
     background-color: #3fada8; } }
 #box-quote-elem #clock-timer {
-  text-align: right; }
+  text-align: right;
+  color: white;
+  font-weight: bold; }
 #box-quote-elem .box {
   background-color: rgba(255, 255, 255, 0.25) !important; }
 #box-quote-elem h1 {
