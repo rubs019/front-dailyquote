@@ -11,10 +11,12 @@ class IndexPage extends React.Component {
     super(props)
 
     this.state = {
-      animate: ['.']
+      animate: ['.'],
+      counter: null
     }
 
     this.playAnimation = this.playAnimation.bind(this)
+    this.counterTick = this.counterTick.bind(this)
   }
 
   playAnimation() {
@@ -48,9 +50,15 @@ class IndexPage extends React.Component {
       }
     }, 1000)
   }
+  counterTick() {
+    this.setState((state) => {
+      state.counter = new Date().toLocaleTimeString()
+    })
+  }
   componentDidMount() {
 
     this.playAnimation()
+    setInterval(this.counterTick, 1000)
 
     fetch(urlQuote)
     // Retrieve its body as ReadableStream
