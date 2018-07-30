@@ -3,8 +3,7 @@ import Link from 'gatsby-link'
 import { Container, Title, Tag, Box, Icon, Columns, Column, Content } from 'bloomer'
 import Moment from 'moment'
 
-const urlQuote = 'https://dailyquotes-api.herokuapp.com/quotes'
-//const urlQuote = 'http://localhost:8003/quotes'
+const url = 'https://dailyquotes-api.herokuapp.com'
 
 class IndexPage extends React.Component {
 
@@ -13,61 +12,27 @@ class IndexPage extends React.Component {
 
     this.state = {
       animate: ['.'],
-      counter: null
+      counter: null,
+      timer: null
     }
 
     this.playAnimation = this.playAnimation.bind(this)
     this.counterToNextQuote = this.counterToNextQuote.bind(this)
   }
 
-  playAnimation() {
-    let previouState = this.state.animate.length
-    const interval = setInterval(() => {
-      if (this.state.quote) clearInterval(interval)
-
-      switch (this.state.animate.length) {
-        case 1 : {
-          previouState = 1
-          this.setState((state) => {
-            state.animate.push('.')
-          })
-          break
-        }
-        case 2 : {
-          this.setState((state) => {
-            if(previouState === 1) state.animate.push('.')
-            if(previouState === 3) state.animate.pop()
-          })
-          break
-        }
-        case 3 : {
-          previouState = 3
-          this.setState((state) => {
-            state.animate.pop()
-          })
-          break
-        }
-
-      }
-    }, 1000)
-  }
-  counterToNextQuote() {
-    const counterForNextQuote = new Moment('2018-07-27')
-    this.setState((state) => {
-      let expire = Moment.duration(counterForNextQuote.diff(Moment.now()))
-      let hours = expire.hours() < 10 ? `0${expire.hours()}` : expire.hours()
-      let minutes = expire.minutes() < 10 ? `0${expire.minutes()}` : expire.minutes()
-      let seconds = expire.seconds() < 10 ? `0${expire.seconds()}` : expire.seconds()
-
-      state.counter = `${hours} : ${minutes} : ${seconds}`
-    })
-  }
   componentDidMount() {
 
     this.playAnimation()
     setInterval(this.counterToNextQuote, 1000)
 
-    fetch(urlQuote)
+    this.getQuote()
+    this.getTimer()
+
+  }
+
+
+  getQuote() {
+    return fetch(`${url}/quotes`)
     // Retrieve its body as ReadableStream
       .then(response => response.body)
       .then(body => {
@@ -102,6 +67,64 @@ class IndexPage extends React.Component {
       })
       .catch(err => console.error(err))
   }
+
+  getTimer() {
+
+    fetch(`${url}/timer`)
+      .then(timer => timer.json())
+      .then(timer => {
+        this.setState({
+          timer
+        })
+      })
+      .catch(err => console.error(err))
+  }
+
+  playAnimation() {
+    let previouState = this.state.animate.length
+    const interval = setInterval(() => {
+      if (this.state.quote) clearInterval(interval)
+
+      switch (this.state.animate.length) {
+        case 1 : {
+          previouState = 1
+          this.setState((state) => {
+            state.animate.push('.')
+          })
+          break
+        }
+        case 2 : {
+          this.setState((state) => {
+            if(previouState === 1) state.animate.push('.')
+            if(previouState === 3) state.animate.pop()
+          })
+          break
+        }
+        case 3 : {
+          previouState = 3
+          this.setState((state) => {
+            state.animate.pop()
+          })
+          break
+        }
+
+      }
+    }, 1000)
+  }
+
+  counterToNextQuote() {
+    const counterForNextQuote = new Moment(this.state.timer.data.dateNextQuote)
+    this.setState((state) => {
+      let expire = Moment.duration(counterForNextQuote.diff(Moment.now()))
+      let hours = expire.hours() < 10 ? `0${expire.hours()}` : expire.hours()
+      let minutes = expire.minutes() < 10 ? `0${expire.minutes()}` : expire.minutes()
+      let seconds = expire.seconds() < 10 ? `0${expire.seconds()}` : expire.seconds()
+
+      state.counter = `${hours} : ${minutes} : ${seconds}`
+    })
+  }
+
+
 
   render() {
     if (!this.state.quote) {
@@ -144,6 +167,13 @@ class IndexPage extends React.Component {
                   <Icon className="fa fa-heart fa" isSize="large" />
                   1324 Like
                 </Tag>
+            </Column>
+
+            <Column>
+              <Tag isColor='warning' isSize="medium">
+                <Icon className="fa fa-share fa" isSize="large" />
+                Partagez
+              </Tag>
             </Column>
 
           </Columns>
