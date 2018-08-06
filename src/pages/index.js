@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'gatsby-link'
 import { Container, Title, Tag, Box, Icon, Columns, Column, Content } from 'bloomer'
 import Moment from 'moment'
+import AppTimer from '../components/Timer'
 
 const url = 'https://dailyquotes-api.herokuapp.com'
 
@@ -17,17 +18,13 @@ class IndexPage extends React.Component {
     }
 
     this.playAnimation = this.playAnimation.bind(this)
-    this.counterToNextQuote = this.counterToNextQuote.bind(this)
   }
 
   componentDidMount() {
 
     this.playAnimation()
-    setInterval(this.counterToNextQuote, 1000)
 
     this.getQuote()
-    this.getTimer()
-
   }
 
 
@@ -68,18 +65,6 @@ class IndexPage extends React.Component {
       .catch(err => console.error(err))
   }
 
-  getTimer() {
-
-    fetch(`${url}/timer`)
-      .then(timer => timer.json())
-      .then(timer => {
-        this.setState({
-          timer
-        })
-      })
-      .catch(err => console.error(err))
-  }
-
   playAnimation() {
     let previouState = this.state.animate.length
     const interval = setInterval(() => {
@@ -112,18 +97,6 @@ class IndexPage extends React.Component {
     }, 1000)
   }
 
-  counterToNextQuote() {
-    const counterForNextQuote = new Moment(this.state.timer.data.dateNextQuote)
-    this.setState((state) => {
-      let expire = Moment.duration(counterForNextQuote.diff(Moment.now()))
-      let hours = expire.hours() < 10 ? `0${expire.hours()}` : expire.hours()
-      let minutes = expire.minutes() < 10 ? `0${expire.minutes()}` : expire.minutes()
-      let seconds = expire.seconds() < 10 ? `0${expire.seconds()}` : expire.seconds()
-
-      state.counter = `${hours} : ${minutes} : ${seconds}`
-    })
-  }
-
 
 
   render() {
@@ -141,7 +114,7 @@ class IndexPage extends React.Component {
 
     return (
       <Container hasTextAlign="centered" id='box-quote-elem'>
-        <p id="clock-timer">Prochaine citations dans { !this.state.counter ? `00:00:00` : this.state.counter}</p>
+        <AppTimer />
         <Box>
           <Title isSize="2">"{ this.state.quote.data.message }"</Title>
           <Columns isVCentered hasTextAlign="right">
